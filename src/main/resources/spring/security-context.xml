@@ -11,43 +11,56 @@
 		http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security.xsd">
-		
-	<!-- 보안을 적용하지 않을 페이지 설정 -->
-	<http pattern="/resource/**" security="none"/>
-	<http pattern="/login" security="none"/>
 
+	<context:component-scan base-package="com.sp" />
+	
 	<!-- 권한이 없는 페이지를 접근할 경우 접근 불가 메시지 출력 -->
 	<http auto-config="true">
 		<!-- spring 4.x때 추가된 옵션으로 ssl을 사용하지 않을 경우 csrf는 disalbed=true로 설정. -->
 		<csrf disabled="true" />
 		
-		<intercept-url pattern="/admin/**" access="hasAnyRole('ROLE_ADMIN')"/>
-		<intercept-url pattern="/bbs/**" access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')"/>
+		<!-- 모든 유저 접근 -->
+		<intercept-url pattern="/index.jsp" access="permitAll" />
+		<intercept-url pattern="/main" access="permitAll" />
+		<intercept-url pattern="/member/login" access="permitAll" />
+		<intercept-url pattern="/member/member" access="permitAll" />
+		<intercept-url pattern="/member/userIdCheck" access="permitAll" />
+		<intercept-url pattern="/member/complete" access="permitAll" />
+
+		<intercept-url pattern="/resource/**" access="permitAll" />
 		
-		<!-- 사용자 정의 로그인 폼 -->
+		<!-- 관리자 페이지 -->
+		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
+
+		<!-- 기타 페이지 -->
+		<intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+
 		<form-login
-			login-page="/login"
-			authentication-failure-url="/login?login_error"
-			default-target-url="/"
-			always-use-default-target="true"
-			login-processing-url="/login_check"
+			login-page="/member/login"
+			login-processing-url="/member/login_check"
 			username-parameter="userId"
-			password-parameter="userPwd"/>
-			
-		<logout
-			logout-url="/logout"
-			invalidate-session="true"/>
-			
+			password-parameter="userPwd"
+			authentication-failure-url="/member/login?login_error"
+			default-target-url="/"
+			always-use-default-target="false"
+			authentication-success-handler-ref="authenticationSuccessHandler" />
+
+		<logout logout-url="/member/logout" invalidate-session="true" logout-success-url="/" />
+
 		<!-- 접근 권한이 없는 경우 -->
-		<access-denied-handler error-page="/noAuthorized"/>
+		<access-denied-handler error-page="/member/noAuthorized" />
+
+		<!-- 동일 아이디 한명만 접근 -->
+		<session-management>
+			<concurrency-control max-sessions="1" expired-url="/member/expired" />
+		</session-management>
 	</http>
 
-	<authentication-manager>
-		<authentication-provider>
-			<user-service>
-				<user name="admin" password="admin" authorities="ROLE_USER, ROLE_ADMIN"/>
-				<user name="hyehwa" password="hyehwa" authorities="ROLE_USER"/>
-			</user-service>
-		</authentication-provider>
-	</authentication-manager>
+	<beans:bean id="authenticationSuccessHandler" class="com.sp.member.MyAuthenticationSuccessHandler" />
+		
+	<jdbc-user-service data-source-ref="dataSource"
+		id="jdbcUserService"
+		users-by-username-query="SELECT userId AS userName, userPwd AS password, enabled FROM member WHERE userId = ?"
+		authorities-by-username-query="SELECT userId AS userName, authority FROM memberAuthority WHERE userId = ?"/>
+
 </beans:beans>

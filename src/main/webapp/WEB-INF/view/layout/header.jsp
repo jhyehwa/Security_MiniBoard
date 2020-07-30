@@ -21,9 +21,9 @@
                 <a href="<%=cp%>/member/member">회원가입</a>
 			</c:if>
 			<c:if test="${isAnonymous==false}">
-				<span style="color: blue;">${username}</span>님
+				<span style="color: blue;">${userName}</span>님
                     &nbsp;|&nbsp;
-                    <a href="<%=cp%>/logout">로그아웃</a>
+                    <a href="<%=cp%>/member/logout">로그아웃</a>
                     &nbsp;|&nbsp;
                     <a href="<%=cp%>/">정보수정</a>
                     &nbsp;|&nbsp;

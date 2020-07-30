@@ -14,9 +14,15 @@ public class MemberController {
 	@Autowired
 	private MemberService service;
 	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login() {
-
+	@RequestMapping(value = "/member/login", method = RequestMethod.GET)
+	public String loginForm(String login_error, Model model) {
+		boolean bLoginError = login_error != null;
+		
+		if(bLoginError) {
+			String msg = "아이디 또는 비밀번호를 잘못 입력 하셨습니다.";
+			model.addAttribute("message", msg);
+		}
+		
 		return "member/login";
 	}
 

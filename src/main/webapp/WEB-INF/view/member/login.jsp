@@ -5,48 +5,43 @@
 <%
 	String cp=request.getContextPath();
 %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-
-<link rel="stylesheet" href="<%=cp%>/resource/css/style.css" type="text/css">
-<link rel="stylesheet" href="<%=cp%>/resource/css/layout.css" type="text/css">
-
-</head>
-<body>
-	<div class="header">
-	    <jsp:include page="/WEB-INF/view/layout/header.jsp"/>
-	</div>
-
-	<div>
-		<div>
-			<span>로그인</span>
-		</div>
+<script type="text/javascript">
+	function sendLogin() {
+		var f = document.loginForm;
 		
-		<form method="post">
-			<table>
-				<tr>
-					<td>
-						<label>아이디</label>
-						<input type="text">
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label>패스워드</label>
-						<input type="text">
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label>로그인</label>
-						<input type="text">
-					</td>
-				</tr>
-			</table>
-		</form>
+		f.action = "<%=cp%>/member/login_check";
+		f.submit();
+	}
+</script>
+
+<div class="header">
+    <jsp:include page="/WEB-INF/view/layout/header.jsp"/>
+</div>
+
+<div>
+	<div>
+		<span>로그인</span>
 	</div>
-</body>
-</html>
+	
+	<form name="loginForm" method="post">
+		<table>
+			<tr>
+				<td>
+					<label>아이디</label>
+					<input type="text" name="userId">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>패스워드</label>
+					<input type="text" name="userPwd">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<button type="button" onclick="sendLogin();">로그인</button>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>

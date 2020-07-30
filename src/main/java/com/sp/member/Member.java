@@ -5,6 +5,9 @@ public class Member {
 	private String userId;
 	private String userPwd;
 	private String userName;
+	private String enabled;
+
+	private String authority;
 
 	public String getNum() {
 		return num;
@@ -36,6 +39,22 @@ public class Member {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(String enabled) {
+		this.enabled = enabled;
+	}
+
+	public String getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(String authority) {
+		this.authority = authority;
 	}
 
 }
