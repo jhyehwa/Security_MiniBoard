@@ -3,6 +3,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="member">
 	<insert id="insertMember" parameterType="com.sp.member.Member">
-		INSERT INTO member(num, userId, userPwd, userName) VALUES (member_seq.NEXTVAL, #{userId}, #{userPwd}, #{userName}) 
+		INSERT INTO member(userId, userPwd, userName) VALUES (#{userId}, #{userPwd}, #{userName}) 
+	</insert>
+	
+	<!-- 회원 정보 가져오기 -->
+	<select id="readMember" parameterType="String" resultType="com.sp.member.Member">
+		SELECT userId, userName, userPwd, NVL(enabled, 0) enabled
+		FROM member
+		WHERE userId = #{userId}
+	</select>
+	
+	<!-- 권한 테이블 -->
+	<insert id="insertAuthority" parameterType="com.sp.member.Member">
+		INSERT INTO memberAuthority(userId, authority) VALUES(#{userId}, #{authority})
 	</insert>
 </mapper>

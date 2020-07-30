@@ -18,7 +18,10 @@ public class MemberServiceImpl implements MemberService {
 	public void insertMember(Member dto) throws Exception {
 		
 		try {
-			dao.insertData("member.insertMember", dto);			
+			dao.insertData("member.insertMember", dto);
+			
+			dto.setAuthority("ROLE_USER");
+			dao.insertData("member.insertAuthority", dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
