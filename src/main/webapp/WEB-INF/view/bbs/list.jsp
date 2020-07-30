@@ -35,7 +35,7 @@
 					</td>
 					<td>${dto.userName}</td>
 					<td>${dto.created}</td>
-					<td>${dto.hitcount}</td>
+					<td>${dto.hitCount}</td>
 					<td>
 						<c:if test="${not empty dto.saveFileName}">
 							<a href="<%=cp%>/bbs/download?num=${dto.num}"></a>
@@ -48,22 +48,7 @@
 		<table>
 			<tr>
 				<td><button type="button" onclick="javascript:location.href='<%=cp%>/bbs/list';">새로고침</button></td>
-				<td>
-					<form name="searchForm" action="<%=cp%>/bbs/list" method="post">
-						<select name="condition">
-							<option value="all" ${condition == "all" ? "selected = 'selected'" : ""}>모두</option>
-							<option value="subject" ${condition == "subject" ? "selected = 'selected'" : ""}>제목</option>
-							<option value="content" ${condition == "content" ? "selected = 'selected'" : ""}>내용</option>
-							<option value="userName" ${condition == "userName" ? "selected = 'selected'" : ""}>작성자</option>
-							<option value="created" ${condition == "created" ? "selected = 'selected'" : ""}>등록일</option>
-						</select>
-						<input type="text" name="keyword" value="${keyword}">
-						<button type="button" onclick="searchList()">검색</button>
-					</form>
-				</td>
-				<td>
-					<button type="button" onclick="javascript:location.href='<%=cp%>/bbs/created';">게시글 등록</button>
-				</td>
+				<td><button type="button" onclick="javascript:location.href='<%=cp%>/bbs/created';">게시글 등록</button></td>
 			</tr>
 		</table>
 	</div>

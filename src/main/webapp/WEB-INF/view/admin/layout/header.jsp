@@ -16,7 +16,9 @@
 	</div>
 	<div class="header-right">
 		<div style="padding-top: 20px; float: right;">
-			<span style="color: blue;">관리자</span>님 &nbsp;|&nbsp; <a href="<%=cp%>/logout">로그아웃</a> &nbsp;|&nbsp; <a href="<%=cp%>/">정보수정</a>
+			<span style="color: blue;">${sessionScope.member.userName}</span>님 &nbsp;|&nbsp;
+			<a href="<%=cp%>/member/logout">로그아웃</a> &nbsp;|&nbsp;
+			<a href="<%=cp%>/member/pwd">정보수정</a>
 		</div>
 	</div>
 </div>

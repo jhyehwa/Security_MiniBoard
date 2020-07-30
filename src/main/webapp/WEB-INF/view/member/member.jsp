@@ -10,6 +10,7 @@
 		var f = document.memberForm;
 		
 		f.action = "<%=cp%>/member/${mode}";
+		
 		f.submit();
 	}
 </script>
@@ -39,7 +40,7 @@
 			<table>
 				<tr>
 					<td>
-						<button type="button" onclick="memberOk();">${mode == "member" ? "회원가입" : "정보수정"}</button>
+						<button type="button" name="sendButton" onclick="memberOk();">${mode == "member" ? "회원가입" : "정보수정"}</button>
 						<button type="reset">다시입력</button>
 						<button type="button" onclick="javascript:location.href='<%=cp%>/';">${mode == "member" ? "가입취소" : "수정취소"}</button>
 					</td>

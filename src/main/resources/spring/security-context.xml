@@ -63,4 +63,14 @@
 		users-by-username-query="SELECT userId AS userName, userPwd AS password, enabled FROM member WHERE userId = ?"
 		authorities-by-username-query="SELECT userId AS userName, authority FROM memberAuthority WHERE userId = ?"/>
 
+	<authentication-manager>
+		<authentication-provider user-service-ref="jdbcUserService">
+			<password-encoder ref="bcryptencoder"/>
+		</authentication-provider>
+	</authentication-manager>
+
+	<!-- 패스워드 암호화에 특화된 password hashing function -->
+	<beans:bean id="bcryptencoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+	
+	</beans:bean>
 </beans:beans>

@@ -15,19 +15,21 @@
 	</div>
 	<div class="header-right">
 		<div style="padding-top: 20px; float: right;">
-			<c:if test="${empty isAnonymous || isAnonymous==true}">
-				<a href="<%=cp%>/login">로그인</a>
+			<c:if test="${empty sessionScope.member}">
+				<a href="<%=cp%>/member/login">로그인</a>
                     &nbsp;|&nbsp;
                 <a href="<%=cp%>/member/member">회원가입</a>
 			</c:if>
-			<c:if test="${isAnonymous==false}">
-				<span style="color: blue;">${userName}</span>님
+			<c:if test="${not empty sessionScope.member}">
+				<span style="color: blue;">${sessionScope.member.userName}</span>님
                     &nbsp;|&nbsp;
                     <a href="<%=cp%>/member/logout">로그아웃</a>
                     &nbsp;|&nbsp;
-                    <a href="<%=cp%>/">정보수정</a>
-                    &nbsp;|&nbsp;
-                    <a href="<%=cp%>/admin">관리자</a>
+                    <a href="<%=cp%>/member/pwd">정보수정</a>
+                    <c:if test="${sessionScope.member.userId == 'admin'}">
+                    	&nbsp;|&nbsp;
+                    	<a href="<%=cp%>/admin">관리자</a>
+                    </c:if>
 			</c:if>
 		</div>
 	</div>

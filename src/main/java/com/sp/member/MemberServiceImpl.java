@@ -1,7 +1,6 @@
 package com.sp.member;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,16 +9,16 @@ import com.sp.common.dao.CommonDAO;
 
 @Service("member.memberService")
 public class MemberServiceImpl implements MemberService {
-	
+
 	@Autowired
 	private CommonDAO dao;
 
 	@Override
 	public void insertMember(Member dto) throws Exception {
-		
+
 		try {
 			dao.insertData("member.insertMember", dto);
-			
+
 			dto.setAuthority("ROLE_USER");
 			dao.insertData("member.insertAuthority", dto);
 		} catch (Exception e) {
@@ -30,53 +29,75 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public void updateMember(Member dto) throws Exception {
-		
+
 		try {
-			dao.updateData("member.updateMember");			
+			dao.updateData("member.updateMember", dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
-		
+
 	}
 
 	@Override
-	public void deleteMember(Member dto) throws Exception {
-		
+	public void deleteMember(String userId) throws Exception {
+
 		try {
-			dao.deleteData("member.deleteMember");
+			dao.deleteData("member.deleteMember", userId);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
-		
+
 	}
 
 	@Override
 	public Member readMember(String userId) {
 		Member dto = null;
-		
+
 		try {
 			dto = dao.selectOne("member.readMember", userId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return dto;
 	}
 
 	@Override
-	public int dataCount(Map<String, Object> map) {
-		int result = 0;
-		
-		return result;
+	public void insertAuthority(Member dto) throws Exception {
+
+		try {
+			dao.insertData("member.insertAuthority", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+
 	}
 
 	@Override
-	public List<Member> listMember(Map<String, Object> map) {
+	public void updateAuthority(Member dto) throws Exception {
+
+		try {
+			dao.updateData("member.updateAuthority", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+
+	}
+
+	@Override
+	public List<Member> listAuthority(String userId) {
 		List<Member> list = null;
-		
+
+		try {
+			list = dao.selectList("member.listAuthority", userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return list;
 	}
-	
+
 }

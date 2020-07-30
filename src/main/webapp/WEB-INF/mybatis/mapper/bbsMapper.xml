@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bbs">
+	<!-- 게시글 등록 -->
+	<insert id="insertBoard" parameterType="com.sp.bbs.Board">
+		INSERT INTO bbs(num, userId, userName, subject, content, created, hitCount, saveFileName, originalFileName)
+		VALUES (bbs_seq.NEXTVAL, #{userId}, #{userName}, #{subject}, #{content}, SYSDATE, 0, #{saveFileName}, #{originalFileName})		 
+	</insert>
+	
+	<!-- 게시글 리스트 -->
+	<select id="listBoard" parameterType="map" resultType="com.sp.bbs.Board">
+		SELECT num, userId, userName, subject, TO_CHAR(created, 'YYYY-MM-DD') created, hitCount, saveFileName
+		FROM bbs
+		ORDER BY num DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
+	</select>
+	
+	<select id="readBoard" parameterType="Integer" resultType="com.sp.bbs.Board">
+		SELECT num, userId, userName, subject, created, hitCount, saveFileName, originalFileName
+		FROM bbs
+		WHERE num = #{num}
+	</select>
+</mapper>
