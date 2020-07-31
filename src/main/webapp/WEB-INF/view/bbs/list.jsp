@@ -47,6 +47,12 @@
 		
 		<table>
 			<tr>
+				<td>${dataCount == 0 ? "등록된 게이물이 없습니다." : paging}</td>
+			</tr>
+		</table>
+		
+		<table>
+			<tr>
 				<td><button type="button" onclick="javascript:location.href='<%=cp%>/bbs/list';">새로고침</button></td>
 				<td><button type="button" onclick="javascript:location.href='<%=cp%>/bbs/created';">게시글 등록</button></td>
 			</tr>

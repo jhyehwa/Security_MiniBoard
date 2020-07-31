@@ -6,7 +6,7 @@ import java.util.Map;
 public interface BoardService {
 	public void insertBoard(Board dto, String pathName) throws Exception;
 	public void updateBoard(Board dto, String pathName) throws Exception;
-	public void deleteBoard(int num, String pathName) throws Exception;
+	public void deleteBoard(int num, String pathName, String userId) throws Exception;
 	public Board readBoard(int num);
 	public Board preReadBoard(Map<String, Object> map);
 	public Board nextReadBoard(Map<String, Object> map);

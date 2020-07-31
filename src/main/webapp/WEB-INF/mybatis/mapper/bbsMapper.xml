@@ -4,21 +4,64 @@
 <mapper namespace="bbs">
 	<!-- 게시글 등록 -->
 	<insert id="insertBoard" parameterType="com.sp.bbs.Board">
-		INSERT INTO bbs(num, userId, userName, subject, content, created, hitCount, saveFileName, originalFileName)
-		VALUES (bbs_seq.NEXTVAL, #{userId}, #{userName}, #{subject}, #{content}, SYSDATE, 0, #{saveFileName}, #{originalFileName})		 
+		INSERT INTO bbs(num, userId, subject, content, created, hitCount, saveFileName, originalFileName)
+		VALUES (bbs_seq.NEXTVAL, #{userId}, #{subject}, #{content}, SYSDATE, 0, #{saveFileName, jdbcType = VARCHAR}, #{originalFileName, jdbcType = VARCHAR})
 	</insert>
 	
 	<!-- 게시글 리스트 -->
 	<select id="listBoard" parameterType="map" resultType="com.sp.bbs.Board">
-		SELECT num, userId, userName, subject, TO_CHAR(created, 'YYYY-MM-DD') created, hitCount, saveFileName
-		FROM bbs
+		SELECT num, b.userId, b.userName, subject, TO_CHAR(created, 'YYYY-MM-DD') created, hitCount, saveFileName
+		FROM bbs b
+		JOIN member m ON b.userId = m.userId
 		ORDER BY num DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{rows} ROWS ONLY
 	</select>
 	
 	<select id="readBoard" parameterType="Integer" resultType="com.sp.bbs.Board">
-		SELECT num, userId, userName, subject, created, hitCount, saveFileName, originalFileName
-		FROM bbs
+		SELECT num, b.userId, b.userName, subject, content, created, hitCount, saveFileName, originalFileName
+		FROM bbs b
+		JOIN member m ON b.userId = m.userId
 		WHERE num = #{num}
+	</select>
+	
+	<!-- 게시글 개수 -->
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM bbs b
+		JOIN member m ON b.userId = m.userId		
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="updateHitCount" parameterType="Integer">
+		UPDATE bbs SET hitCount = hitCount + 1 WHERE num = #{num}
+	</update>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateBoard" parameterType="com.sp.bbs.Board">
+		UPDATE bbs SET subject = #{subject}, content = #{content}, saveFileName = #{saveFileName, jdbcType = VARCHAR}, originalFileName = #{originalFileName, jdbcType = VARCHAR}
+		WHERE num = #{num}
+	</update>
+	
+ 	<!-- 게시글 삭제 -->
+	<delete id="deleteBoard" parameterType="Integer">
+		DELETE FROM bbs WHERE num = #{num}	
+	</delete>
+	
+	<!-- 이전글 -->
+	<select id="preReadBoard" parameterType="map" resultType="com.sp.bbs.Board">
+		SELECT num, subject
+		FROM bbs b
+		JOIN member m ON b.userId = m.userId
+		ORDER BY num ASC
+		FETCH FIRST 1 ROWS ONLY
+	</select>
+	
+	<!-- 다음글 -->
+	<select id="nextReadBoard" parameterType="map" resultType="com.sp.bbs.Board">
+		SELECT num, subject
+		FROM bbs b
+		JOIN member m ON b.userId = m.userId
+		ORDER BY num ASC
+		FETCH FIRST 1 ROWS ONLY
 	</select>
 </mapper>

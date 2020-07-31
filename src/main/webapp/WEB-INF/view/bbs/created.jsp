@@ -17,7 +17,7 @@
 
 <div>
 	<div>
-		<h3>게시글 등록</h3>
+		<h3>게시판</h3>
 	</div>
 	
 	<div>
@@ -25,24 +25,32 @@
 			<table>
 				<tr>
 					<td>제목</td>
-					<td><input type="text" name="subject"></td>
+					<td><input type="text" name="subject" value="${dto.subject}"></td>
 				</tr>
 				<tr>
 					<td>작성자</td>
-					<td><input type="text" name="userName"></td>
+					<td>${sessionScope.member.userName}</td>
 				</tr>
 				<tr>
 					<td>내용</td>
-					<td><input type="text" name="content"></td>
+					<td><textarea name="content" rows="12">${dto.content}</textarea></td>
 				</tr>
 				<tr>
 					<td>첨부</td>
 					<td><input type="file" name="upload"></td>
 				</tr>
-				<tr>
-					<td>첨부 된 파일</td>
-					
-				</tr>
+				
+				<c:if test="${mode == 'update'}">				
+					<tr>
+						<td>첨부 된 파일</td>
+						<td>
+							<c:if test="${not empty dto.saveFileName}">
+								<a href="<%=cp%>/bbs/deleteFile?num=${dto.num}&page=${page}"></a>
+							</c:if>
+							${dto.originalFileName}
+						</td>
+					</tr>
+				</c:if>
 			</table>
 			
 			<table>
