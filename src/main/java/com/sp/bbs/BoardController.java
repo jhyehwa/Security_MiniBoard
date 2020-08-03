@@ -111,7 +111,7 @@ public class BoardController {
 		String pathName = root + "uploads" + File.separator + "bbs";
 
 		try {
-			dto.setUserId(info.getUserId());
+			dto.setUserName(info.getUserName());
 			service.insertBoard(dto, pathName);
 		} catch (Exception e) {
 			e.printStackTrace();

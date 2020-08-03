@@ -47,7 +47,7 @@
 		
 		<table>
 			<tr>
-				<td>${dataCount == 0 ? "등록된 게이물이 없습니다." : paging}</td>
+				<td>${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}</td>
 			</tr>
 		</table>
 		
