@@ -2,7 +2,7 @@ package com.sp.member;
 
 import java.util.List;
 
-public interface MemberService {
+public interface MemberService {	
 	public void insertMember(Member dto) throws Exception;
 	public void updateMember(Member dto) throws Exception;
 	public void deleteMember(String userId) throws Exception;

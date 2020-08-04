@@ -12,13 +12,13 @@ body {
 
 a {
 	cursor: pointer;
-	color: #000000;
+	color: #034B5D;
 	text-decoration: none;
 	/*line-height: 150%;*/
 }
 a:hover, a:active {
-	color: #F28011;
-	text-decoration: underline;
+	color: #E87A54;
+	font-weight: bold;
 }
 
 .btn {
@@ -35,7 +35,7 @@ a:hover, a:active {
 .btn:active, .btn:focus, .btn:hover {
 	background-color:#e6e6e6;
 	border-color: #adadad;
-	color: #333333;
+	color: #034B5D;
 }
 .btn[disabled], fieldset[disabled] .btn {
 	pointer-events: none;
@@ -63,7 +63,7 @@ a:hover, a:active {
 	line-height: 100px;
 	border: 1px solid #DAD9FF;
 	padding: 5px;
-	color:#333333;
+	color: #034B5D;
 	font-size:14px;
 	text-align: center;
 	border-radius:4px;

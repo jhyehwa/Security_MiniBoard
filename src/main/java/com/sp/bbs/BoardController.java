@@ -111,6 +111,7 @@ public class BoardController {
 		String pathName = root + "uploads" + File.separator + "bbs";
 
 		try {
+			dto.setUserId(info.getUserId());
 			dto.setUserName(info.getUserName());
 			service.insertBoard(dto, pathName);
 		} catch (Exception e) {
@@ -179,10 +180,10 @@ public class BoardController {
 	public String updateSubmit(Board dto, @RequestParam String page, HttpSession session) throws Exception {
 
 		String root = session.getServletContext().getRealPath("/");
-		String pathname = root + "uploads" + File.separator + "bbs";
+		String pathName = root + "uploads" + File.separator + "bbs";
 
 		try {
-			service.updateBoard(dto, pathname);
+			service.updateBoard(dto, pathName);
 		} catch (Exception e) {
 		}
 
@@ -195,7 +196,7 @@ public class BoardController {
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
 
 		String root = session.getServletContext().getRealPath("/");
-		String pathname = root + "uploads" + File.separator + "bbs";
+		String pathName = root + "uploads" + File.separator + "bbs";
 
 		Board dto = service.readBoard(num);
 		if (dto == null) {
@@ -208,10 +209,10 @@ public class BoardController {
 
 		try {
 			if (dto.getSaveFileName() != null) {
-				fileManager.doFileDelete(dto.getSaveFileName(), pathname); // 실제파일삭제
+				fileManager.doFileDelete(dto.getSaveFileName(), pathName); // 실제파일삭제
 				dto.setSaveFileName("");
 				dto.setOriginalFileName("");
-				service.updateBoard(dto, pathname); // DB 테이블의 파일명 변경(삭제)
+				service.updateBoard(dto, pathName); // DB 테이블의 파일명 변경(삭제)
 			}
 		} catch (Exception e) {
 		}
@@ -229,9 +230,9 @@ public class BoardController {
 
 		String query = "page=" + page;
 		String root = session.getServletContext().getRealPath("/");
-		String pathname = root + "uploads" + File.separator + "bbs";
+		String pathName = root + "uploads" + File.separator + "bbs";
 
-		service.deleteBoard(num, pathname, info.getUserId());
+		service.deleteBoard(num, pathName, info.getUserId());
 
 		return "redirect:/bbs/list?" + query;
 	}
@@ -244,14 +245,15 @@ public class BoardController {
 			HttpSession session) throws Exception {
 
 		String root = session.getServletContext().getRealPath("/");
-		String pathname = root + "uploads" + File.separator + "bbs";
+		String pathName = root + "uploads" + File.separator + "bbs";
 
 		Board dto = service.readBoard(num);
 
 		if (dto != null) {
-			boolean b = fileManager.doFileDownload(dto.getSaveFileName(), dto.getOriginalFileName(), pathname, resp);
-			if (b)
-				return;
+			boolean b = fileManager.doFileDownload(dto.getSaveFileName(), dto.getOriginalFileName(), pathName, resp);
+			if (b) {
+				return;				
+			}
 		}
 
 		resp.setContentType("text/html;charset=UTF-8");

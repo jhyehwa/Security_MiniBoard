@@ -20,7 +20,7 @@ public class MemberController {
 
 	@Autowired
 	private BCryptPasswordEncoder bcrypt;
-
+	
 	@RequestMapping(value = "/member/login", method = RequestMethod.GET)
 	public String loginForm(String login_error, Model model) {
 		boolean bLoginError = login_error != null;

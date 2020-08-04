@@ -5,6 +5,10 @@
 <%
 	String cp=request.getContextPath();
 %>
+
+<link rel="stylesheet" href="<%=cp%>/resource/css/style.css" type="text/css">
+<link rel="stylesheet" href="<%=cp%>/resource/css/layout.css" type="text/css">
+
 <script type="text/javascript">
 	function sendLogin() {
 		var f = document.loginForm;
@@ -18,30 +22,32 @@
     <jsp:include page="/WEB-INF/view/layout/header.jsp"/>
 </div>
 
-<div>
-	<div>
-		<span>로그인</span>
+<div class="container">
+	<div class="body-container" style="width: 800px; margin-top: 50px;">
+		<div style="font-weight: bold; font-size: 25px; text-align: center;">
+			<span>로그인</span>
+		</div>
+		
+		<form name="loginForm" method="post">
+			<table style="margin: 0 auto; margin-top: 20px;">
+				<tr>
+					<td>
+						<label style="font-size: 20px;">아이디&nbsp;&nbsp;&nbsp; </label>
+						<input type="text" name="userId" style="height: 30px; margin-bottom: 5px;">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label style="font-size: 20px;">비밀번호 </label>
+						<input type="text" name="userPwd" style="height: 30px;">
+					</td>
+				</tr>
+				<tr>
+					<td style="padding-top: 20px;">
+						<button type="button" onclick="sendLogin();" style="margin-left: 35px; background: #E87A54; border: none; color: white; height: 30px; width: 200px;">로그인</button>
+					</td>
+				</tr>
+			</table>
+		</form>
 	</div>
-	
-	<form name="loginForm" method="post">
-		<table>
-			<tr>
-				<td>
-					<label>아이디</label>
-					<input type="text" name="userId">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label>패스워드</label>
-					<input type="text" name="userPwd">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<button type="button" onclick="sendLogin();">로그인</button>
-				</td>
-			</tr>
-		</table>
-	</form>
 </div>

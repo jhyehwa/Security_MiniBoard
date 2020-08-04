@@ -4,8 +4,8 @@
 <mapper namespace="bbs">
 	<!-- 게시글 등록 -->
 	<insert id="insertBoard" parameterType="com.sp.bbs.Board">
-		INSERT INTO bbs(num, userId, subject, content, created, hitCount, saveFileName, originalFileName)
-		VALUES (bbs_seq.NEXTVAL, #{userId}, #{subject}, #{content}, SYSDATE, 0, #{saveFileName, jdbcType = VARCHAR}, #{originalFileName, jdbcType = VARCHAR})
+		INSERT INTO bbs(num, userId, userName, subject, content, created, hitCount, saveFileName, originalFileName)
+		VALUES (bbs_seq.NEXTVAL, #{userId}, #{userName}, #{subject}, #{content}, SYSDATE, 0, #{saveFileName, jdbcType = VARCHAR}, #{originalFileName, jdbcType = VARCHAR})
 	</insert>
 	
 	<!-- 게시글 리스트 -->
@@ -61,7 +61,7 @@
 		SELECT num, subject
 		FROM bbs b
 		JOIN member m ON b.userId = m.userId
-		ORDER BY num ASC
+		ORDER BY num DESC
 		FETCH FIRST 1 ROWS ONLY
 	</select>
 </mapper>

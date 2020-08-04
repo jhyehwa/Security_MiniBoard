@@ -5,56 +5,58 @@
 <%
 	String cp=request.getContextPath();
 %>
-<div>
-	<div>
-		<h3>게시판</h3>
-	</div>
+
+<link rel="stylesheet" href="<%=cp%>/resource/css/style.css" type="text/css">
+<link rel="stylesheet" href="<%=cp%>/resource/css/layout.css" type="text/css">
+
+<div class="header">
+    <jsp:include page="/WEB-INF/view/layout/header.jsp"/>
+</div>
+
+<div class="container">
+	<div class="body-container" style="width: 800px; margin-top: 50px;">
+		<div style="font-weight: bold; font-size: 20px; text-align: left;">
+			<span>| 게시판</span>&nbsp;<span style="font-size: 18px; font-weight: normal;">${dataCount}개 (${page}/${total_page} 페이지)</span>
+		</div>
 	
-	<div>
-		<table>
-			<tr>
-				<td>${dataCount}개 (${page}/${total_page} 페이지)</td>
-			</tr>
-		</table>
-		
-		<table>
-			<tr>
-				<td>번호</td>
-				<td>제목</td>
-				<td>작성자</td>
-				<td>작성일</td>
-				<td>조회수</td>
-				<td>첨부</td>
+		<table style="border-collapse: 0px; border-spacing: 0px; margin: 0 auto; margin-top: 20px;">
+			<tr align="center">
+				<td style="border-bottom: 1px solid #A6522B; width: 50px; padding-bottom: 5px;">번호</td>
+				<td style="border-bottom: 1px solid #A6522B; width: 200px; padding-bottom: 5px;">제목</td>
+				<td style="border-bottom: 1px solid #A6522B; width: 150px; padding-bottom: 5px;">작성자</td>
+				<td style="border-bottom: 1px solid #A6522B; width: 150px; padding-bottom: 5px;">작성일</td>
+				<td style="border-bottom: 1px solid #A6522B; width: 100px; padding-bottom: 5px;">조회수</td>
+				<td style="border-bottom: 1px solid #A6522B; width: 100px; padding-bottom: 5px;">첨부</td>
 			</tr>
 			
 			<c:forEach var="dto" items="${list}">
-				<tr>
-					<td>${dto.listNum}</td>
-					<td>
+				<tr align="center">
+					<td style="padding-top: 10px; padding-bottom: 10px;">${dto.listNum}</td>
+					<td style="padding-top: 10px; padding-bottom: 10px;">
 						<a href="${articleUrl}&num=${dto.num}">${dto.subject}</a>
 					</td>
-					<td>${dto.userName}</td>
-					<td>${dto.created}</td>
-					<td>${dto.hitCount}</td>
-					<td>
+					<td style="padding-top: 10px; padding-bottom: 10px;">${dto.userName}</td>
+					<td style="padding-top: 10px; padding-bottom: 10px;">${dto.created}</td>
+					<td style="padding-top: 10px; padding-bottom: 10px;">${dto.hitCount}</td>
+					<td style="padding-top: 10px; padding-bottom: 10px;">
 						<c:if test="${not empty dto.saveFileName}">
-							<a href="<%=cp%>/bbs/download?num=${dto.num}"></a>
+							<a href="<%=cp%>/bbs/download?num=${dto.num}">파일</a>
 						</c:if>
 					</td>
 				</tr>
 			</c:forEach>
 		</table>
 		
-		<table>
+		<table style="margin: 0 auto; margin-top: 20px;">
 			<tr>
 				<td>${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}</td>
 			</tr>
 		</table>
 		
-		<table>
+		<table style="margin: 0 auto; margin-top: 20px;">
 			<tr>
-				<td><button type="button" onclick="javascript:location.href='<%=cp%>/bbs/list';">새로고침</button></td>
-				<td><button type="button" onclick="javascript:location.href='<%=cp%>/bbs/created';">게시글 등록</button></td>
+				<td><button type="button" onclick="javascript:location.href='<%=cp%>/bbs/list';" style="background: #E87A54; border: none; color: white; height: 30px; width: 100px;">새로고침</button></td>
+				<td><button type="button" onclick="javascript:location.href='<%=cp%>/bbs/created';" style="margin-left: 15px; background: #E87A54; border: none; color: white; height: 30px; width: 100px;">게시글 등록</button></td>
 			</tr>
 		</table>
 	</div>

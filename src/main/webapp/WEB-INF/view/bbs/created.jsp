@@ -5,6 +5,10 @@
 <%
 	String cp=request.getContextPath();
 %>
+
+<link rel="stylesheet" href="<%=cp%>/resource/css/style.css" type="text/css">
+<link rel="stylesheet" href="<%=cp%>/resource/css/layout.css" type="text/css">
+
 <script type="text/javascript">
 	function sendOk() {
 		var f = document.createdForm;
@@ -15,14 +19,18 @@
 	}
 </script>
 
-<div>
-	<div>
-		<h3>게시판</h3>
-	</div>
-	
-	<div>
+<div class="header">
+    <jsp:include page="/WEB-INF/view/layout/header.jsp"/>
+</div>
+
+<div class="container">
+	<div class="body-container" style="width: 800px; margin-top: 50px;">
+		<div style="font-weight: bold; font-size: 20px; text-align: left;">
+			<span>| 글 작성</span>
+		</div>
+
 		<form name="createdForm" method="post" enctype="multipart/form-data">
-			<table>
+			<table style="border-collapse: 0px; border-spacing: 0px; margin: 0 auto; margin-top: 20px;">
 				<tr>
 					<td>제목</td>
 					<td><input type="text" name="subject" value="${dto.subject}"></td>

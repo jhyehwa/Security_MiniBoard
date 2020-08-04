@@ -4,8 +4,10 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Calendar;
@@ -19,404 +21,372 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service("fileManager")
 public class FileManager {
-	
 	/**
 	 * 파일을 업로드 하기 위한 메소드
-	 * @param partFile 업로드 할 파일 정보를 가지고 있는 MultipartFile 객체
-	 * @param pathname 파일을 저장 할 경로
-	 * @return 		     서버에 저장된 새로운 파일의 이름
+	 * 
+	 * @param partFile 업로드할 파일정보를 가지고 있는 MultipartFile 객체
+	 * @param pathname 파일을 저장할 경로
+	 * @return         서버에 저장된 새로운 파일의 이름
 	 */
-	public String doFileUpload(MultipartFile partFile, String pathName) throws Exception {
-		String saveFileName = null;
-		
-		if(partFile == null || partFile.isEmpty()) {
+	public String doFileUpload(MultipartFile partFile, String pathname) throws Exception {
+		String saveFilename = null;
+
+		if (partFile == null || partFile.isEmpty())
 			return null;
-		}
-		
+
 		// 클라이언트가 업로드한 파일의 이름
-		String originalFileName = partFile.getOriginalFilename();
-		if(originalFileName == null || originalFileName.length() == 0) {
+		String originalFilename = partFile.getOriginalFilename();
+		if (originalFilename == null || originalFilename.length() == 0)
 			return null;
-		}
-		
+
 		// 확장자
-		String fileExt = originalFileName.substring(originalFileName.lastIndexOf("."));
-		if(fileExt == null || fileExt.equals("")) {
+		String fileExt = originalFilename.substring(originalFilename.lastIndexOf("."));
+		if (fileExt == null || fileExt.equals(""))
 			return null;
-		}
-		
-		// 서버에 저장 할 새로운 파일명을 만듬
-		saveFileName = String.format("%1$tY%1$tm%1$td%1$tH%1$tM%1$tS", Calendar.getInstance());
-		saveFileName += System.nanoTime();
-		saveFileName += fileExt;
-		
-		// File.separator : //와 같은 것
-		String fullPathName = pathName + File.separator + saveFileName;
-		
-		// 업로드 할 경로가 존재하지 않는 경우 폴더를 생성
-		// getParentFile() : 부모 폴더를 File의 형태로 리튼
-		// exists() : 파일의 존재 여부를 리턴
-		// mkdirs() : 존재하지 않는 부모 폴더까지 포함하여 해당 경로에 폴더를 만듬
-		File f = new File(fullPathName);
-		if(!f.getParentFile().exists()) {
+
+		// 서버에 저장할 새로운 파일명을 만든다.
+		saveFilename = String.format("%1$tY%1$tm%1$td%1$tH%1$tM%1$tS", Calendar.getInstance());
+		saveFilename += System.nanoTime();
+		saveFilename += fileExt;
+
+		String fullpathname = pathname + File.separator + saveFilename;
+		// 업로드할 경로가 존재하지 않는 경우 폴더를 생성 한다.
+		File f = new File(fullpathname);
+		if (!f.getParentFile().exists())
 			f.getParentFile().mkdirs();
-		}
-		
+
 		partFile.transferTo(f); // transferTo() : 파일 객체를 넘겨주면 그 객체의 이름으로 파일 저장
-		
-		return saveFileName;
+
+		return saveFilename;
 	}
-	
+
 	/**
 	 * 파일을 업로드 하기 위한 메소드
-	 * @param bytes 		     업로드 할 파일 정보를 가지고 있는 byte 배열
-	 * @param originalFileName 클라이언트가 업로드 한 파일명
-	 * @param pathName 		     파일을 저장 할 경로
-	 * @return 				     서버에 저장된 새로운 파일의 이름
+	 * 
+	 * @param bytes            업로드할 파일정보를 가지고 있는byte 배열
+	 * @param originalFilename 클라이언트가 업로드한 파일명
+	 * @param pathname         파일을 저장할 경로
+	 * @return                 서버에 저장된 새로운 파일의 이름
 	 */
-	public String doFileUpload(byte[] bytes, String originalFileName, String pathName) throws Exception {
-		String saveFileName = null;
-		
-		if(bytes == null) {
+	public String doFileUpload(byte[] bytes, String originalFilename, String pathname) throws Exception {
+		String saveFilename = null;
+
+		if (bytes == null)
 			return null;
-		}
-		
-		// 클라이언트가 업로드 한 파일의 이름
-		if(originalFileName == null || originalFileName.length() == 0) {
-			return null;
-		}
-		
-		// 확장자
-		String fileExt = originalFileName.substring(originalFileName.lastIndexOf("."));
-		if(fileExt == null || fileExt.equals("")) {
-			return null;
-		}
-		
-		// 서버에 저장 할 새로운 파일명을 만듬
-		saveFileName = String.format("%1$tY%1$tm%1$td%1$tH%1$tM%1$tS", Calendar.getInstance());
-		saveFileName += System.nanoTime();
-		saveFileName += fileExt;
-		
-		// 업로드할 경로가 존재하지 않는 경우 폴더를 생성
-		File dir = new File(pathName);
-		if(!dir.exists()) {
-			dir.mkdirs();
-		}
-		
-		String fullPathName = pathName + File.separator + saveFileName;
-		
-		// FileOutputStream : 무조건 해당 파일을 생성한다. 존재하는 파일일 경우 덮어쓰기함.
-		FileOutputStream fos = new FileOutputStream(fullPathName);
-		fos.write(bytes); // 입력받은 내용을 파일 내용으로 기록
-		fos.close(); // 파일을 닫음
-		
-		return saveFileName;
-	}
-	
-	/**
-	 * 파일을 업로드 하기 위한 메소드
-	 * @param is			     업로드 할 파일 정보를 가지고 있는 InputStream 객체
-	 * @param originalFileName 클라이언트가 업로드 한 파일명
-	 * @param pathName		     파일을 저장 할 경로
-	 * @return				     서버에 저장된 새로운 파일의 이름
-	 */
-	public String doFileUpload(InputStream is, String originalFileName, String pathName) throws Exception {
-		String saveFileName = null;
-		
+
 		// 클라이언트가 업로드한 파일의 이름
-		if(originalFileName == null || originalFileName.equals("")) {
+		if (originalFilename == null || originalFilename.length() == 0)
 			return null;
-		}
-		
+
 		// 확장자
-		String fileExt = originalFileName.substring(originalFileName.lastIndexOf("."));
-		if(fileExt == null || fileExt.equals("")) {
+		String fileExt = originalFilename.substring(originalFilename.lastIndexOf("."));
+		if (fileExt == null || fileExt.equals(""))
 			return null;
-		}
-		
-		// 서버에 저장 할 새로운 파일명을 만듬
-		saveFileName = String.format("%1$tY%1$tm%1$td%1$tH%1$tM%1$tS", Calendar.getInstance());
-		saveFileName += System.nanoTime();
-		saveFileName += fileExt;
-		
-		// 업로드할 경로가 존재하지 않는 경우 폴더를 생성
-		File dir = new File(pathName);
-		if(!dir.exists()) {
+
+		// 서버에 저장할 새로운 파일명을 만든다.
+		saveFilename = String.format("%1$tY%1$tm%1$td%1$tH%1$tM%1$tS", Calendar.getInstance());
+		saveFilename += System.nanoTime();
+		saveFilename += fileExt;
+
+		// 업로드할 경로가 존재하지 않는 경우 폴더를 생성 한다.
+		File dir = new File(pathname);
+		if (!dir.exists())
 			dir.mkdirs();
-		}
-		
-		String fullPathName = pathName + File.separator + saveFileName;
-		
+
+		String fullpathname = pathname + File.separator + saveFilename;
+
+		FileOutputStream fos = new FileOutputStream(fullpathname);
+		fos.write(bytes);
+		fos.close();
+
+		return saveFilename;
+	}
+
+	/**
+	 * 파일을 업로드 하기 위한 메소드
+	 * 
+	 * @param is               업로드할 파일정보를 가지고 있는 InputStream 객체
+	 * @param originalFilename 클라이언트가 업로드한 파일명
+	 * @param pathname         파일을 저장할 경로
+	 * @return                 서버에 저장된 새로운 파일의 이름
+	 */
+	public String doFileUpload(InputStream is, String originalFilename, String pathname) throws Exception {
+		String saveFilename = null;
+
+		// 클라이언트가 업로드한 파일의 이름
+		if (originalFilename == null || originalFilename.equals(""))
+			return null;
+
+		// 확장자
+		String fileExt = originalFilename.substring(originalFilename.lastIndexOf("."));
+		if (fileExt == null || fileExt.equals(""))
+			return null;
+
+		// 서버에 저장할 새로운 파일명을 만든다.
+		saveFilename = String.format("%1$tY%1$tm%1$td%1$tH%1$tM%1$tS", Calendar.getInstance());
+		saveFilename += System.nanoTime();
+		saveFilename += fileExt;
+
+		// 업로드할 경로가 존재하지 않는 경우 폴더를 생성 한다.
+		File dir = new File(pathname);
+		if (!dir.exists())
+			dir.mkdirs();
+
+		String fullpathname = pathname + File.separator + saveFilename;
+
 		byte[] b = new byte[1024];
 		int size = 0;
-		FileOutputStream fos = new FileOutputStream(fullPathName);
-		
-		while((size = is.read(b)) != -1) {
+		FileOutputStream fos = new FileOutputStream(fullpathname);
+
+		while ((size = is.read(b)) != -1) {
 			fos.write(b, 0, size);
 		}
-		
+
 		fos.close();
 		is.close();
-		
-		return saveFileName;
+
+		return saveFilename;
 	}
-	
+
 	/**
 	 * 파일을 다운로드하는 메소드
-	 * @param saveFileName	     서버에 저장 할 파일 이름
-	 * @param originalFileName 클라이언크가 업로드 한 파일 이름
-	 * @param pathName		     파일이 저장된 경로
-	 * @param response		     응답할 HttpServletResponse 객체
-	 * @return				     파일 다운로드 성공 여부
+	 * 
+	 * @param saveFilename     서버에 저장된 파일이름
+	 * @param originalFilename 클라이언트가 업로드한 파일이름
+	 * @param pathname         파일이 저장된 경로
+	 * @param response         응답할 HttpServletResponse 객체
+	 * @return                 파일 다운로드 성공 여부
 	 */
-	public boolean doFileDownload(String saveFileName, String originalFileName, String pathName, HttpServletResponse response) {
-		String fullPathName = pathName + File.separator + saveFileName;
-		
+	public boolean doFileDownload(String saveFilename, String originalFilename, String pathname,
+			HttpServletResponse response) {
+		String fullpathname = pathname + File.separator + saveFilename;
+
 		try {
-			if(originalFileName == null || originalFileName.equals("")) {
-				originalFileName = saveFileName;
-				originalFileName = new String(originalFileName.getBytes("euc-kr"), "8859_1");
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
+			if (originalFilename == null || originalFilename.equals(""))
+				originalFilename = saveFilename;
+			originalFilename = new String(originalFilename.getBytes("euc-kr"), "8859_1");
+		} catch (UnsupportedEncodingException e) {
 		}
-		
+
 		try {
-			File file = new File(fullPathName);
-			
-			if(file.exists()) {
+			File file = new File(fullpathname);
+
+			if (file.exists()) {
 				byte readByte[] = new byte[4096];
-				
-				response.setContentType("applivation/octet-stream");
-				response.setHeader("Content-disposition", "attachment);fileName=" + originalFileName);
-				
+
+				response.setContentType("application/octet-stream");
+				response.setHeader("Content-disposition", "attachment;filename=" + originalFilename);
+
 				BufferedInputStream fin = new BufferedInputStream(new FileInputStream(file));
+				// javax.servlet.ServletOutputStream outs = response.getOutputStream();
 				OutputStream outs = response.getOutputStream();
-				
+
 				int read;
-				while((read = fin.read(readByte, 0, 4096)) != -1) {
+				while ((read = fin.read(readByte, 0, 4096)) != -1)
 					outs.write(readByte, 0, read);
-				}
-				
 				outs.flush();
 				outs.close();
 				fin.close();
-				
+
 				return true;
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
-		
+
 		return false;
 	}
 
 	/**
+	 * 파일들을 zip 파일로 압축하여 다운로드하는 메소드
+	 * 
+	 * @param sources     폴더명을 포함한 서버에 저장된 압축할 파일들(경로 포함)
+	 * @param originals   압축할 파일들이 압축될 때의 파일명
+	 * @param zipFilename 다운로드할 때 클라이언트에 표시할 zip 파일명
+	 * @param response    응답할 HttpServletResponse 객체
+	 * @return            파일 다운로드 성공 여부
+	 */
+	public boolean doZipFileDownload(String[] sources, String[] originals, String zipFilename,
+			HttpServletResponse response) {
+		String pathname = System.getProperty("user.dir") + File.separator + "temp";
+		String archiveFilename;
+
+		// 파일들을 압축
+		archiveFilename = fileCompression(sources, originals, pathname);
+		if (archiveFilename == null) {
+			return false;
+		}
+
+		// 파일 다운로드
+		boolean b = doFileDownload(archiveFilename, zipFilename, pathname, response);
+
+		// 압축한 zip 파일 삭제
+		String fullpathname = pathname + File.separator + archiveFilename;
+		doFileDelete(fullpathname);
+
+		return b;
+	}
+
+	/**
 	 * 파일들을 압축하는 메소드
-	 * @param sources   폴더 명을 포함한 압축 할 파일들
-	 * @param originals 압축 할 파일들이 압축 될 때의 파일명
-	 * @param pathName  압축 파일을 저장할 경로
+	 * 
+	 * @param sources   폴더명을 포함한 압축할 파일들
+	 * @param originals 압축할 파일들이 압축될 때의 파일명
+	 * @param pathname  압축 파일을 저장할 경로
 	 * @return          압축된 파일명
 	 */
-	private String fileCompression(String[] sources, String[] originals, String pathName) {
-		String archiveFileName = null;
-		String fullPathName = null;
-		
+	public String fileCompression(String[] sources, String[] originals, String pathname) {
+		String archiveFilename = null;
+		String fullpathname = null;
+
 		final int MAX_SIZE = 2048;
 		byte[] buf = new byte[MAX_SIZE];
 		String s;
 		File f;
-		
+
 		ZipOutputStream zos = null;
-        FileInputStream fis = null;
-        
+		FileInputStream fis = null;
 		try {
-			f = new File(pathName);
-			if(!f.exists()) {
+			f = new File(pathname);
+			if (!f.exists()) {
 				f.mkdirs();
 			}
-			
-			archiveFileName = String.format("%1$tY%1$tm%1$td%1$tH%1$tM%1$tS", Calendar.getInstance());
-			archiveFileName += System.nanoTime() + ".zip";
-			fullPathName = pathName + File.separator + archiveFileName;
-			
-			zos = new ZipOutputStream(new FileOutputStream(fullPathName));
-			
+
+			archiveFilename = String.format("%1$tY%1$tm%1$td%1$tH%1$tM%1$tS", Calendar.getInstance());
+			archiveFilename += System.nanoTime() + ".zip";
+			fullpathname = pathname + File.separator + archiveFilename;
+
+			zos = new ZipOutputStream(new FileOutputStream(fullpathname));
+
 			int length;
-			for(int idx = 0; idx < sources.length; idx++) {
+			for (int idx = 0; idx < sources.length; idx++) {
 				fis = new FileInputStream(sources[idx]);
-				
-				// 압축 파일에 압축되는 파일명
-				if(originals != null && originals.length >= idx) {
+
+				// 압축파일에 압축되는 파일명
+				// zos.putNextEntry(new ZipEntry(sources[idx]));
+				if (originals != null && originals.length >= idx) {
 					s = originals[idx];
 				} else {
 					s = sources[idx].substring(sources[idx].lastIndexOf(File.separator));
 				}
-				
-				if(s.indexOf(File.separator) == -1) {
-					s = File.separator;
-				}
-				
+				if (s.indexOf(File.separator) == -1)
+					s = File.separator + s;
 				zos.putNextEntry(new ZipEntry(s));
-				
+
 				length = 0;
-				while((length = fis.read(buf)) > 0) {
+				while ((length = fis.read(buf)) > 0) {
 					zos.write(buf, 0, length);
 				}
-				
 				zos.closeEntry();
 				fis.close();
 			}
-			
 			fis.close();
-		} catch (Exception e) {
-			// TODO: handle exception
+		} catch (IOException e) {
 		} finally {
 			try {
 				zos.closeEntry();
 				zos.close();
-			} catch (Exception e2) {
-				// TODO: handle exception
+			} catch (IOException e) {
 			}
 		}
-		
-		f = new File(fullPathName);
-		if(!f.exists()) {
+
+		f = new File(fullpathname);
+		if (!f.exists())
 			return null;
-		}
-		
-		return archiveFileName;
+
+		return archiveFilename;
 	}
-	
+
 	/**
 	 * 파일을 삭제하는 메소드
-	 * @param pathName 경로를 포함한 삭제 할 파일의 이름
+	 * 
+	 * @param pathname 경로를 포함한 삭제할 파일이름
 	 */
-	public void doFileDelete(String pathName) {
-		File file = new File(pathName);
-		
-		if(file.exists()) {
+	public void doFileDelete(String pathname) {
+		File file = new File(pathname);
+		if (file.exists())
 			file.delete();
-		}
 	}
-	
+
 	/**
 	 * 파일을 삭제하는 메소드
-	 * @param fileName 삭제 할 파일의 이름
-	 * @param pathName 삭제 할 파일이 존재하는 경로
+	 * 
+	 * @param filename 삭제할 파일 이름
+	 * @param pathname 삭제할 파일이 존재하는 경로
 	 */
-	public void doFileDelete(String fileName, String pathName) {
-		String fullPathName = pathName + File.separator + fileName;
-		File file = new File(fullPathName);
-		
-		if(file.exists()) {
+	public void doFileDelete(String filename, String pathname) {
+		String fullpathname = pathname + File.separator + filename;
+		File file = new File(fullpathname);
+		if (file.exists())
 			file.delete();
-		}
 	}
-	
-	/**
-	 * 파일들을 zip 파일로 압축하여 다운로드하는 메소드
-	 * @param sources     폴더명을 포함한 서버에 저장된 압축 할 파일들(경로 포함)
-	 * @param originals   압축 할 파일들이 압축될 때의 파일명
-	 * @param zipFileName 다운로드할 때 클라이언트에 표시 할 zip 파일명
-	 * @param response    응답할 HttpServletResponse 객체
-	 * @return            파일 다운로드 성공 여부
-	 */
-	public boolean doZipFileDownload(String[] sources, String[] originals, String zipFileName, HttpServletResponse response) {
-		String pathName = System.getProperty("user.dir") + File.separator + "temp";
-		String archiveFileName;
-		
-		// 파일들을 압축
-		archiveFileName = fileCompression(sources, originals, pathName);
-		if(archiveFileName == null) {
-			return false;
-		}
-		
-		// 파일 다운로드
-		boolean b = doFileDownload(archiveFileName, zipFileName, pathName, response);
-		
-		// 압축한 zip 파일 삭제
-		String fullPathName = pathName + File.separator + archiveFileName;
-		doFileDelete(fullPathName);
-		
-		return b;
-	}
-	
+
 	/**
 	 * 파일 또는 폴더 및 하위 폴더를 삭제하는 메소드
-	 * @param pathName 삭제 할 파일명(경로 포함) 또는 삭제 할 폴더
+	 * 
+	 * @param pathname 삭제할 파일명(경로포함) 또는 삭제할 폴더
 	 */
-	private void removeSubDirectory(String pathName) {
-		File[] listFile = new File(pathName).listFiles();
-		
+	public void removePathname(String pathname) {
 		try {
-			if(listFile.length > 0) {
-				for(int i = 0; i < listFile.length; i++) {
-					if(listFile[i].isDirectory()) {
+			File f = new File(pathname);
+			if (!f.exists())
+				return;
+
+			if (f.isDirectory())
+				removeSubDirectory(pathname);
+
+			f.delete();
+		} catch (Exception e) {
+		}
+	}
+
+	private void removeSubDirectory(String pathname) {
+		File[] listFile = new File(pathname).listFiles();
+		try {
+			if (listFile.length > 0) {
+				for (int i = 0; i < listFile.length; i++) {
+					if (listFile[i].isDirectory()) {
 						removeSubDirectory(listFile[i].getPath());
 					}
 					listFile[i].delete();
 				}
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-	}
-	
-	public void removePathName(String pathName) {
-		
-		try {
-			File f = new File(pathName);
-			if(!f.exists()) {
-				return;
-			}
-			
-			if(f.isDirectory()) {
-				removeSubDirectory(pathName);
-			}
-			
-			f.delete();
-		} catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
 
 	/**
 	 * 파일의 길이를 구하는 메소드
-	 * @param pathName 길이를 구할 경로를 포함한 파일 이름
-	 * @return   	     파일의 길이
+	 * 
+	 * @param pathname 길이를 구할 경로를 포함한 파일이름
+	 * @return         파일의 길이
 	 */
-	public long getFileSize(String pathName) {
+	public long getFilesize(String pathname) {
 		long size = -1;
-		
-		File file = new File(pathName);
-		
-		if(!file.exists()) {
+
+		File file = new File(pathname);
+		if (!file.exists())
 			return size;
-		}
-		
+
 		size = file.length();
-		
+
 		return size;
 	}
-	
+
 	/**
 	 * 파일의 타입을 구하는 메소드
-	 * @param pahtName 파일 타입을 구할 파일 이름
-	 * @return		     파일 타입
+	 * 
+	 * @param pathname 파일 타입을 구할 파일이름
+	 * @return         파일 타입
 	 */
-	public String getFileType(String pahtName) {
+	public String getFiletype(String pathname) {
 		String type = "";
-		
 		try {
-			URL u = new URL("file: " + pahtName);
+			URL u = new URL("file:" + pathname);
 			URLConnection uc = u.openConnection();
 			type = uc.getContentType();
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
-		
+
 		return type;
 	}
 }

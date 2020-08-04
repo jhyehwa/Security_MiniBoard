@@ -21,7 +21,7 @@
 		</c:if>
 	}
 	
-	function updateBoard() {
+<%-- 	function updateBoard() {
 		<c:if test="${sessionScope.member.userId == dto.userId}">
 			var q = "num=${dto.num}&page=${page}";
 			var url = "<%=cp%>/bbs/update?" + q;
@@ -32,7 +32,7 @@
 		<c:if test="${sessionScope.member.userId!=dto.userId}">
 			alert("게시물을 수정할 수  없습니다.");
 		</c:if>
-	}
+	} --%>
 </script>
 
 <div>
@@ -73,8 +73,8 @@
 		<tr>
 			<td>
 				이전글:
-				<c:if test="${not empty preReadDto}">
-					<a href="<%=cp%>/bbs/article?${query}&num=${dto.preReadDto.num}">${preReadDto.subject}</a>
+				<c:if test="${not empty preReadBoard}">
+					<a href="<%=cp%>/bbs/article?${query}&num=${preReadBoard.num}">${preReadBoard.subject}</a>
 				</c:if>
 			</td>
 		</tr>
@@ -82,8 +82,8 @@
 		<tr>
 			<td>
 				다음글:
-				<c:if test="${not empty nextReadDto}">
-					<a href="<%=cp%>/bbs/article?${query}&num=${dto.nextReadDto.num}">${nextReadDto.subject}</a>
+				<c:if test="${not empty nextReadBoard}">
+					<a href="<%=cp%>/bbs/article?${query}&num=${nextReadBoard.num}">${nextReadBoard.subject}</a>
 				</c:if>
 			</td>
 		</tr>
