@@ -30,28 +30,28 @@
 		</div>
 
 		<form name="createdForm" method="post" enctype="multipart/form-data">
-			<table style="border-collapse: 0px; border-spacing: 0px; margin: 0 auto; margin-top: 20px;">
+			<table style="border-collapse: 0px; border-spacing: 0px; margin: 0 auto; margin-top: 20px; width: 800px;">
 				<tr>
-					<td>제목</td>
-					<td><input type="text" name="subject" value="${dto.subject}"></td>
+					<td style="width: 100px; height: 50px; background: #EBE2D9; text-align: center; border-bottom: 1px solid black;">제목</td>
+					<td style="border-bottom: 1px solid black;"><input type="text" name="subject" value="${dto.subject}" style="width: 650px; height: 30px; margin-left: 10px;"></td>
 				</tr>
 				<tr>
-					<td>작성자</td>
-					<td>${sessionScope.member.userName}</td>
+					<td style="width: 100px; height: 50px; background: #EBE2D9; text-align: center; border-bottom: 1px solid black;">작성자</td>
+					<td style="width: 650px; height: 30px; border-bottom: 1px solid black; padding-left: 10px;">${sessionScope.member.userName}</td>
 				</tr>
 				<tr>
-					<td>내용</td>
-					<td><textarea name="content" rows="12">${dto.content}</textarea></td>
+					<td style="width: 100px; height: 50px; background: #EBE2D9; text-align: center; border-bottom: 1px solid black;">내용</td>
+					<td style="border-bottom: 1px solid black;"><textarea name="content" rows="12" style="width: 650px; margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">${dto.content}</textarea></td>
 				</tr>
 				<tr>
-					<td>첨부</td>
-					<td><input type="file" name="upload"></td>
+					<td style="width: 100px; height: 50px; background: #EBE2D9; text-align: center; border-bottom: 1px solid black;">첨부</td>
+					<td style="border-bottom: 1px solid black;"><input type="file" name="upload" style="width: 650px; height: 30px; margin-left: 10px;"></td>
 				</tr>
 				
 				<c:if test="${mode == 'update'}">				
 					<tr>
-						<td>첨부 된 파일</td>
-						<td>
+						<td style="width: 100px; height: 50px; background: #EBE2D9; text-align: center;">첨부 된 파일</td>
+						<td style="padding-left: 10px;">
 							<c:if test="${not empty dto.saveFileName}">
 								<a href="<%=cp%>/bbs/deleteFile?num=${dto.num}&page=${page}"></a>
 							</c:if>
@@ -61,12 +61,12 @@
 				</c:if>
 			</table>
 			
-			<table>
+			<table style="margin: 0 auto; margin-top: 20px;">
 				<tr>
 					<td>
-						<button type="button" onclick="sendOk();">${mode == 'update' ? '수정하기' : '등록하기'}</button>
-						<button type="reset">다시입력</button>
-						<button type="button" onclick="javascript:location.href='<%=cp%>/bbs/list';">${mode == 'update' ? '수정취소' : '등록취소'}</button>
+						<button type="button" onclick="sendOk();" style="color: white; background: #E87A54; border: none; height: 30px; width: 80px;">${mode == 'update' ? '수정하기' : '등록하기'}</button>
+						<button type="reset" style="color: white; background: #E87A54; border: none; height: 30px; width: 80px;">다시입력</button>
+						<button type="button" onclick="javascript:location.href='<%=cp%>/bbs/list';" style="color: white; background: #E87A54; border: none; height: 30px; width: 80px;">${mode == 'update' ? '수정취소' : '등록취소'}</button>
 						
 						<c:if test="${mode == 'update'}">
 							<input type="hidden" name="num" value="${dto.num}">

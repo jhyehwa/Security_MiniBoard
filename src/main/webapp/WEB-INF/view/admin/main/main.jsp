@@ -30,9 +30,5 @@
     </div>
 </div>
 
-<div class="footer">
-    <jsp:include page="/WEB-INF/view/admin/layout/footer.jsp"/>
-</div>
-
 </body>
 </html>

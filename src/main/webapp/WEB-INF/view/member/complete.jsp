@@ -7,19 +7,28 @@
 	String cp = request.getContextPath();
 %>
 
-<div class="body-container">
+<link rel="stylesheet" href="<%=cp%>/resource/css/style.css" type="text/css">
+<link rel="stylesheet" href="<%=cp%>/resource/css/layout.css" type="text/css">
 
-	<div style="margin: 0px auto; padding-top: 90px; width: 420px;">
-		<div style="text-align: center;">
-			<span style="font-weight: bold; font-size: 27px; color: #424951;">${title}</span>
-		</div>
+<div class="header">
+    <jsp:include page="/WEB-INF/view/layout/header.jsp"/>
+</div>
 
-		<div class="messageBox">
-			<div style="line-height: 150%; padding-top: 35px;">${message}</div>
-			<div style="margin-top: 20px;">
-				<button type="button" onclick="javascript:location.href='<%=cp%>/';" class="btnConfirm">메인화면으로 이동</button>
+<div class="container">
+	<div class="body-container">
+	
+		<div style="margin: 0px auto; padding-top: 90px; width: 420px;">
+			<div style="text-align: center;">
+				<span style="font-weight: bold; font-size: 27px; color: #424951;">${title}</span>
+			</div>
+	
+			<div class="messageBox">
+				<div style="line-height: 150%; padding-top: 35px;">${message}</div>
+				<div style="margin-top: 20px;">
+					<button type="button" onclick="javascript:location.href='<%=cp%>/';" class="btnConfirm">메인화면으로 이동</button>
+				</div>
 			</div>
 		</div>
+	
 	</div>
-
 </div>

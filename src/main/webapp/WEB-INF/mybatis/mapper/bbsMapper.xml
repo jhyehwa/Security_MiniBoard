@@ -18,7 +18,7 @@
 	</select>
 	
 	<select id="readBoard" parameterType="Integer" resultType="com.sp.bbs.Board">
-		SELECT num, b.userId, b.userName, subject, content, created, hitCount, saveFileName, originalFileName
+		SELECT num, b.userId, b.userName, subject, content, TO_CHAR(created, 'YYYY-MM-DD') created, hitCount, saveFileName, originalFileName
 		FROM bbs b
 		JOIN member m ON b.userId = m.userId
 		WHERE num = #{num}

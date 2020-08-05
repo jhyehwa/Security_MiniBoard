@@ -48,9 +48,9 @@
 				<table style="margin: 0 auto; margin-top: 20px;">
 					<tr>
 						<td>
-							<button type="button" name="sendButton" onclick="memberOk();" style="color: white; background: #E87A54; border: none; height: 30px;">${mode == "member" ? "회원가입" : "정보수정"}</button>
-							<button type="reset" style="background: #E87A54; border: none; height: 30px; color: white;">다시입력</button>
-							<button type="button" onclick="javascript:location.href='<%=cp%>/';" style="color: white; background: #E87A54; border: none; height: 30px;">${mode == "member" ? "가입취소" : "수정취소"}</button>
+							<button type="button" name="sendButton" onclick="memberOk();" style="color: white; background: #E87A54; border: none; height: 30px; width: 80px;">${mode == "member" ? "회원가입" : "정보수정"}</button>
+							<button type="reset" style="background: #E87A54; border: none; height: 30px; color: white; width: 80px;">다시입력</button>
+							<button type="button" onclick="javascript:location.href='<%=cp%>/';" style="color: white; background: #E87A54; border: none; height: 30px; width: 80px;">${mode == "member" ? "가입취소" : "수정취소"}</button>
 						</td>
 					</tr>
 				</table>

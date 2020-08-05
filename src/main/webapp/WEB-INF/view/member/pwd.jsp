@@ -6,6 +6,9 @@
 	String cp=request.getContextPath();
 %>
 
+<link rel="stylesheet" href="<%=cp%>/resource/css/style.css" type="text/css">
+<link rel="stylesheet" href="<%=cp%>/resource/css/layout.css" type="text/css">
+
 <script type="text/javascript">
 	function sendOk() {
 		var f = document.pwdForm;
@@ -23,32 +26,36 @@
 	}
 </script>
 
-<div>
-	<div>
-		<div>
+<div class="header">
+    <jsp:include page="/WEB-INF/view/layout/header.jsp"/>
+</div>
+
+<div class="container">
+	<div class="body-container" style="width: 800px; margin-top: 50px;">
+		<div style="font-weight: bold; font-size: 25px; text-align: center; border-bottom: 1px solid black; padding-bottom: 15px;">
 			<span>비밀번호 확인</span>
 		</div>
 		
 		<form name="pwdForm" method="post">
-			<table>
-				<tr>
-					<td>정보 보호를 위해 비밀번호를 다시 한 번 입력 해 주세요.</td>				
+			<table style="width: 800px;">
+				<tr style="float: left; margin-top: 20px; margin-bottom: 20px;">
+					<td style="font-size: 18px; margin-top: 20px;">| 정보 보호를 위해 비밀번호를 다시 한 번 입력 해 주세요.</td>				
+				</tr>
+				
+				<tr style="text-align: center;">
+					<td><input type="text" name="userId" value="${sessionScope.member.userId} 님" readonly="readonly" style="border: none; font-size: 20px; margin-bottom: 10px; width: 300px; text-align: center; height: 50px;"></td>
 				</tr>
 				
 				<tr>
-					<td><input type="text" name="userId" value="${sessionScope.member.userId}" readonly="readonly"></td>
-				</tr>
-				
-				<tr>
-					<td>
+					<td style="text-align: center;">
 						<label>비밀번호</label>
-						<input type="password" name="userPwd">
+						<input type="password" name="userPwd" style="font-size: 18px;">
 					</td>
 				</tr>
 				
 				<tr>
-					<td>
-						<button type="button" onclick="sendOk();">확인</button>
+					<td style="text-align: center;">
+						<button type="button" onclick="sendOk();" style="background: #E87A54; border: none; color: white; height: 30px; width: 300px; border-radius: 30px; font-size: 18px; margin-top: 20px;">확인</button>
 						<input type="hidden" name="mode" value="${mode}">
 					</td>
 				</tr>
